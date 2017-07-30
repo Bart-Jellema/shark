@@ -229,6 +229,7 @@ class BasePageHandler(BaseHandler):
                 self.renderer.render_variables(obj.variables)
 
             self.renderer.render_all(self.items)
+
             javascript.append(self.renderer.js)
 
             for obj in keep_variable_objects:

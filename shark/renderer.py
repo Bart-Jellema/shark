@@ -36,7 +36,7 @@ class Renderer:
 
     def add_css_class(self, css):
         if not css in self._css_classes:
-            self._css_classes[css] = '{}{}'.format(self.inline_style_class_base, len(self._css_classes))
+            self._css_classes[css] = '{}{}_{}'.format(self.inline_style_class_base, self.object_number, len(self._css_classes))
         return self._css_classes[css]
 
     def append(self, p_object):

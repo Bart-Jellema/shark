@@ -460,6 +460,7 @@ class Submit(Object):
     @ensure_formgroup
     def get_html(self, renderer):
         on_click = '$("#" + this.form.id + " .form-error").children().remove();'
-        on_click += '$(this.form).find("[name=sub_action]").attr("value", "{}");'.format(self.action)
-        on_click += 'send_action($(this.form).serialize());'
+        on_click += '$("#" + this.form.id).find("[name=sub_action]").attr("value", "{}");'.format(self.action)
+        # on_click += 'send_action($(this.form).serialize());'
+        on_click += '$(this.form).submit());'
         renderer.append('<button type="submit" class="btn btn-primary" onclick=\'{};return false;\'>Submit</button>'.format(on_click))

@@ -40,7 +40,7 @@ function bind_forms() {
     // Send form data as AJAX
     $('form[data-async]').on('submit', function(event) {
         $.ajax( {
-            url: 'http://host.com/action/',
+            url: window.location.href,
             type: 'POST',
             data: new FormData( this ),
             processData: false,
