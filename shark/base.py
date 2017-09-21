@@ -1,6 +1,6 @@
 import logging
 from collections import Iterable
-from inspect import isclass
+from inspect import isclass, isroutine, getmembers
 
 from shark.common import Default
 from shark.dependancies import escape_url, escape_html
@@ -15,33 +15,33 @@ class BaseParamConverter(object):
 class EnumerationMeta(type):
     @property
     def value_map(cls):
-        if not cls._value_map:
+        if not cls.__value_map:
             obj = cls()
-            cls._value_map = {
+            cls.__value_map = {
                 obj.__getattribute__(name): name
                 for name in dir(cls)
                 if name not in dir(Enumeration) and isinstance(obj.__getattribute__(name), int)
             }
 
-        return cls._value_map
+        return cls.__value_map
 
     @property
     def str_map(cls):
-        if not cls._str_map:
+        if not cls.__str_map:
             cls._str_map = {value: key for key, value in cls.value_map.items()}
             obj = cls()
-            cls._str_map = {
+            cls.__str_map = {
                 name: obj.__getattribute__(name)
                 for name in dir(cls)
                 if name not in dir(Enumeration) and isinstance(obj.__getattribute__(name), int)
                 }
     
-        return cls._str_map
+        return cls.__str_map
 
 
 class Enumeration(BaseParamConverter, metaclass=EnumerationMeta):
-    _value_map = None
-    _str_map = None
+    __value_map = None
+    __str_map = None
 
     @classmethod
     def name(cls, value):
@@ -74,6 +74,13 @@ class Enumeration(BaseParamConverter, metaclass=EnumerationMeta):
                 pass
 
         raise TypeError('Parameter isn\'t of type {}'.format(cls.__name__))
+
+    @classmethod
+    def choices(cls):
+        members = getmembers(cls, lambda m: not(isroutine(m)))
+        props = [m for m in members if not(m[0][:1] == '_')]
+        choices = tuple([(p[1], p[0]) for p in props])
+        return choices
 
 
 class Value(object):
