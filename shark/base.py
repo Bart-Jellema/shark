@@ -15,33 +15,34 @@ class BaseParamConverter(object):
 class EnumerationMeta(type):
     @property
     def value_map(cls):
-        if not cls.__value_map:
+        if not cls._value_map:
             obj = cls()
-            cls.__value_map = {
+            cls._value_map = {
                 obj.__getattribute__(name): name
                 for name in dir(cls)
                 if name not in dir(Enumeration) and isinstance(obj.__getattribute__(name), int)
             }
 
-        return cls.__value_map
+        return cls._value_map
 
     @property
     def str_map(cls):
-        if not cls.__str_map:
+        if not cls._str_map:
+            #TODO: Is this line enough?
             cls._str_map = {value: key for key, value in cls.value_map.items()}
             obj = cls()
-            cls.__str_map = {
+            cls._str_map = {
                 name: obj.__getattribute__(name)
                 for name in dir(cls)
                 if name not in dir(Enumeration) and isinstance(obj.__getattribute__(name), int)
                 }
     
-        return cls.__str_map
+        return cls._str_map
 
 
 class Enumeration(BaseParamConverter, metaclass=EnumerationMeta):
-    __value_map = None
-    __str_map = None
+    _value_map = None
+    _str_map = None
 
     @classmethod
     def name(cls, value):
