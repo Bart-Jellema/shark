@@ -171,7 +171,11 @@ def create_table(data, columns, transforms = None, include_header = True, row_ac
                     table_row.columns.append(TableColumn(transforms[field_name](row)))
                 elif field_name.lower() in in_function(row):
                     value = get_function(row, field_name.lower())
-                    table_row.columns.append(TableColumn(value if isinstance(value, str) else str(value)))
+                    if value is None:
+                        value = ''
+                    if not isinstance(value, str):
+                        value = str(value)
+                    table_row.columns.append(TableColumn(value))
             table.rows.append(table_row)
 
     return table
