@@ -114,6 +114,19 @@ class Code(Object):
         html.append('<code' + self.base_attributes + '>' + self.text + '</code>')
 
 
+class Label(Object):
+    def __init__(self, text='', button_style=ButtonStyle.default, **kwargs):
+        self.init(kwargs)
+        self.text = self.param(text, StringParam, 'Text of the formatted paragraph')
+        self.button_style = self.param(button_style, ButtonStyle, 'Visual style of the label')
+        self.add_class('label')
+        if self.button_style != ButtonStyle.default:
+            self.add_class('label-{}'.format(ButtonStyle.name(self.button_style)))
+
+    def get_html(self, html):
+        html.append('<span' + self.base_attributes + '>' + self.text + '</span>')
+
+
 class Br(Object):
     """
     Adds a line break.

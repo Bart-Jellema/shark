@@ -284,6 +284,7 @@ class Object(BaseObject, BaseParamConverter):
                 self.items += obj
 
                 return self
+            return Objects([self, obj])
         else:
             raise NotImplementedError("{} does not have 'items'".format(self.__class__.__name__))
 
