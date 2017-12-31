@@ -333,6 +333,10 @@ class Objects(list, BaseObject):
         self.append(objectify(other))
         return self
 
+    def __radd__(self, other):
+        self.insert(0, objectify(other))
+        return self
+
     def __iadd__(self, other):
         self.append(objectify(other))
         return self
